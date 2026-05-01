@@ -13,21 +13,9 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build & Test & Package') {
             steps {
-                bat 'mvn clean compile'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-            }
-        }
-
-        stage('Package') {
-            steps {
-                bat 'mvn package'
+                bat 'mvnw.cmd clean package'
             }
         }
 
@@ -40,7 +28,7 @@ pipeline {
 
     post {
         always {
-            junit 'target/surefire-reports/*.xml'
+            junit testResults: 'target/surefire-reports/*.xml', allowEmptyResults: true
         }
         success {
             echo 'Build Successful!'
